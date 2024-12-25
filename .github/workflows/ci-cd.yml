@@ -16,7 +16,7 @@ jobs:
     - name: Increment version
       run: |
         VERSION=$(grep -oP '(?<=<version>).*?(?=</version>)' pom.xml)
-        NEW_VERSION=$(echo $VERSION | awk -F. '{print $1 "." $2 "." ($3+1)}')  
+        NEW_VERSION=$(echo $VERSION | awk -F. '{print $1 "." $2 "." $3+1}')
         sed -i "s|<version>.*</version>|<version>${NEW_VERSION}</version>|g" pom.xml
         git config user.name "linor.ronen"
         git config user.email "linor.ronen@gmail.com"
