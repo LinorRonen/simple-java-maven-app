@@ -13,27 +13,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    
     - name: Increment version
       run: |
         VERSION=$(grep -oP '(?<=<version>).*?(?=</version>)' pom.xml)
-        NEW_VERSION=$(echo $VERSION | awk -F. '{print $1 "." $2 "." $3+1}')
+        NEW_VERSION=$(echo $VERSION | awk -F. '{print $1 "." $2 "." ($3+1)}')  
         sed -i "s|<version>.*</version>|<version>${NEW_VERSION}</version>|g" pom.xml
         git config user.name "linor.ronen"
         git config user.email "linor.ronen@gmail.com"
         git commit -am "Increment patch version to $NEW_VERSION"
-        git push origin master
-
+        git push origin master  
 
     - name: Build JAR
       run: mvn clean package
 
-
     - name: Build Docker Image
       run: |
         docker build -t linorg/simple-java-maven-app:${NEW_VERSION} .
-    
-  
+
     - name: Push to Docker Hub
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u linorg --password-stdin
