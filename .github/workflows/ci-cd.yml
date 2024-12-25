@@ -22,7 +22,7 @@ jobs:
         git config user.name "linor.ronen"
         git config user.email "linor.ronen@gmail.com"
         git commit -am "Increment patch version to $NEW_VERSION"
-        git push origin main
+        git push origin master
 
 
     - name: Build JAR
