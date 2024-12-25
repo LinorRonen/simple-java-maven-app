@@ -13,15 +13,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Set up Maven
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17' 
+        maven-version: '3.9.2'  
+
     - name: Increment version
       run: |
-        
         VERSION=$(grep -oP '(?<=<version>).*?(?=</version>)' pom.xml | head -n 1)
-        
-        
         NEW_VERSION=$(echo $VERSION | awk -F. '{print $1 "." $2 "." $3+1}')
-        
-        
         sed -i "0,/<version>${VERSION}<\/version>/s|<version>.*</version>|<version>${NEW_VERSION}</version>|" pom.xml
         git config user.name "linor.ronen"
         git config user.email "linor.ronen@gmail.com"
