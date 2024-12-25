@@ -17,15 +17,18 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'  
-        maven-version: '3.9.2'  
-        distribution: 'temurin' 
+        maven-version: '3.9.2' 
+        distribution: 'temurin'  
 
     - name: Increment version
       run: |
-        # Extract the current version from the pom.xml
-        VERSION=$(grep -oP '(?<=<version>).*?(?=</version>)' pom.xml | head -n 1)
-        echo "Current version extracted: $VERSION"
+        sudo apt-get install -y xmlstarlet
 
+        
+        VERSION=$(xmlstarlet sel -t -m "/project/version" -v . -n pom.xml | head -n 1)
+        echo "Current version extracted: '$VERSION'"
+
+        
         if [[ -z "$VERSION" ]]; then
           echo "ERROR: No version found in pom.xml. Exiting."
           exit 1
@@ -33,7 +36,7 @@ jobs:
 
         
         NEW_VERSION=$(echo $VERSION | awk -F. '{print $1 "." $2 "." ($3+1)}')
-        echo "New version: $NEW_VERSION"
+        echo "New version: '$NEW_VERSION'"
 
         
         sed -i "0,/<version>${VERSION}<\/version>/s|<version>.*</version>|<version>${NEW_VERSION}</version>|" pom.xml
@@ -49,15 +52,16 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        
+      
         echo "Building Docker image with tag linorg/simple-java-maven-app:${NEW_VERSION}"
 
-      
+        
         if [[ -z "$NEW_VERSION" ]]; then
           echo "ERROR: NEW_VERSION is empty. Cannot proceed with Docker build."
           exit 1
         fi
-        
+
+
         docker build -t linorg/simple-java-maven-app:${NEW_VERSION} .
 
     - name: Push to Docker Hub
