@@ -13,11 +13,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Maven
+    - name: Set up Java with Maven
       uses: actions/setup-java@v3
       with:
-        java-version: '17' 
+        java-version: '17'  
         maven-version: '3.9.2'  
+        distribution: 'temurin'  
 
     - name: Increment version
       run: |
