@@ -17,15 +17,13 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'  
-        maven-version: '3.9.2' 
+        maven-version: '3.9.2'  
         distribution: 'temurin'  
 
     - name: Increment version
       run: |
-        sudo apt-get install -y xmlstarlet
-
         
-        VERSION=$(xmlstarlet sel -t -m "/project/version" -v . -n pom.xml | head -n 1)
+        VERSION=$(grep -oP '(?<=<version>).*?(?=</version>)' pom.xml | head -n 1)
         echo "Current version extracted: '$VERSION'"
 
         
@@ -52,20 +50,19 @@ jobs:
 
     - name: Build Docker Image
       run: |
-      
+        # Print the tag that will be used
         echo "Building Docker image with tag linorg/simple-java-maven-app:${NEW_VERSION}"
 
-        
+        # Check if NEW_VERSION is empty before running the docker build
         if [[ -z "$NEW_VERSION" ]]; then
           echo "ERROR: NEW_VERSION is empty. Cannot proceed with Docker build."
           exit 1
         fi
 
-
+        
         docker build -t linorg/simple-java-maven-app:${NEW_VERSION} .
 
     - name: Push to Docker Hub
       run: |
-        # Log in to Docker Hub
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u linorg --password-stdin
         docker push linorg/simple-java-maven-app:${NEW_VERSION}
