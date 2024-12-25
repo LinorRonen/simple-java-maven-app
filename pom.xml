@@ -3,14 +3,14 @@
    <groupId>com.mycompany.app</groupId>
    <artifactId>my-app</artifactId>
    <packaging>jar</packaging>
-   <version>1.0.9</version>
+   <version>1.0.6-SNAPSHOT</version>
    <name>my-app</name>
    <url>https://maven.apache.org</url>
    <dependencies>
        <dependency>
            <groupId>org.junit.jupiter</groupId>
            <artifactId>junit-jupiter-api</artifactId>
-           <version>1.0.8</version>
+           <version>5.11.4</version>
            <scope>test</scope>
        </dependency>
    </dependencies>
@@ -23,7 +23,7 @@
                <plugin>
                    <groupId>org.apache.maven.plugins</groupId>
                    <artifactId>maven-compiler-plugin</artifactId>
-                   <version>1.0.8</version>
+                   <version>3.13.0</version>
                    <configuration>
                        <release>17</release>
                    </configuration>
@@ -34,7 +34,7 @@
            <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-jar-plugin</artifactId>
-               <version>1.0.8</version>
+               <version>3.4.2</version>
                <configuration>
                    <archive>
                        <manifest>
@@ -48,7 +48,7 @@
            <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-enforcer-plugin</artifactId>
-               <version>1.0.8</version>
+               <version>3.5.0</version>
                <executions>
                    <execution>
                        <id>enforce-maven</id>
@@ -58,10 +58,10 @@
                        <configuration>
                            <rules>
                                <requireMavenVersion>
-                                   <version>1.0.8</version>
+                                   <version>[3.9.2,)</version>
                                </requireMavenVersion>
                                <requireJavaVersion>
-                                   <version>1.0.8</version>
+                                   <version>[17,)</version>
                                </requireJavaVersion>
                            </rules>
                        </configuration>
@@ -71,7 +71,7 @@
            <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-release-plugin</artifactId>
-               <version>1.0.8</version>
+               <version>3.0.1</version>
                <configuration>
                    <tagNameFormat>v@{project.version}</tagNameFormat>
                    <autoVersionSubmodules>true</autoVersionSubmodules>
@@ -81,5 +81,3 @@
        </plugins>
    </build>
 </project>
-
-
